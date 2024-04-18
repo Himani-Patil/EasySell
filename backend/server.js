@@ -13,15 +13,11 @@ const db = mysql.createConnection({
     database: "easysell"
 });
 
-app.get("/signup", (req,res) => {
-    
-});
-
 app.post("/login", (req,res) => {
 
     //search data in database
-    const sql1 = "SELECT * FROM Users WHERE userId = ?"; 
-    const sql2 = "SELECT * FROM Users WHERE userId = ? AND password = ?";
+    const sql1 = "SELECT * FROM users WHERE userId = ?"; 
+    const sql2 = "SELECT * FROM users WHERE userId = ? AND password = ?";
     const values = [
         req.body.email,
         req.body.password
@@ -50,6 +46,27 @@ app.post("/login", (req,res) => {
             else {
                 return res.json("No account present!");
             }
+        }
+    });
+});
+
+app.post("/signup", (req,res) => {
+
+    //search data in database
+    const sql = "INSERT INTO users (name, userId, password, location) VALUES (?)";
+    const values = [
+        req.body.name,
+        req.body.email,
+        req.body.password,
+        req.body.location
+    ];
+
+    db.query(sql, [values], (err, data) => {
+        if(err) {
+            return res.json(err);
+        }
+        else {
+            return res.json("Success!");            
         }
     });
 });
